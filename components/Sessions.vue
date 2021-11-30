@@ -327,7 +327,7 @@ export default {
         background-color: #98338b !important;
         color: #ffffff;
     }
-    input[type="checkbox"]:checked + .css-14ay6c5-className, input[type="checkbox"][aria-checked="mixed"]  + .css-14ay6c5-className{
+    input[type="checkbox"]:checked + div, input[type="checkbox"][aria-checked="mixed"] + div {
         background-color: #0d75b5 !important;
     }
 </style>
