@@ -20,6 +20,9 @@
                         </option>
                     </c-select>
                 </c-form-control>
+                <c-text v-if="session.session_code">
+                    Share this code with the players in your group.
+                </c-text>
                 <c-button mt="4" variant-color="blue" @click="newSession()">New Session</c-button>
             </c-box>
             <c-box v-if="session.id" w="100%">
