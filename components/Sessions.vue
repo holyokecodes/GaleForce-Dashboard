@@ -5,7 +5,7 @@
                 <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
                     Session
                 </c-heading>
-                <c-form-control max-width="240px">
+                <c-form-control v-if="sessions.length > 0" max-width="240px">
                     <c-select 
                         id="active-session" 
                         v-model="session.session_code"
@@ -270,13 +270,14 @@ export default {
                     secret: data.session_secret
                 }
                 addDoc(this.userSessions, newSession)
+                this.selectSession(newSession.code)
+                this.sessions.push(newSession)
             })
         },
         async selectSession(code) {
             const sessionsRef = collection(this.db, 'sessions');
             const querySnapshot = await getDocs(query(sessionsRef, where('session_code', '==', code)))
             querySnapshot.forEach((doc) => {
-                console.log(doc.id, ' => ', doc.data());
                 this.session = doc.data()
                 this.session.id = doc.id 
             });
