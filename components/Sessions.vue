@@ -5,13 +5,14 @@
                 <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
                     Session
                 </c-heading>
-                <c-form-control v-if="sessions.length > 0" max-width="240px">
+                <c-form-control v-if="sessions.length > 0" d="flex">
                     <c-select 
                         id="active-session" 
                         v-model="session.session_code"
                         placeholder="Select session"
                         variant="filled"
-                        @change="(val) => selectSession(val)">
+                        @change="(val) => selectSession(val)"
+                        max-width="240px">
                         <option 
                             v-for="session in sessions" 
                             v-bind:key="session.code" 
@@ -19,6 +20,7 @@
                             {{ session.code }}
                         </option>
                     </c-select>
+                    <c-icon-button id="copy" v-if="session.id" @click="copySession()" aria-label="Copy session code" icon="copy" ml="2"/>
                 </c-form-control>
                 <c-text v-if="session.session_code">
                     Share this code with the players in your group.
@@ -60,12 +62,52 @@
             </c-box>
         </c-grid>
         <c-box v-if="session.id" py="8" borderTop="1px solid #ccc">
-            <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
-                Team Stages
-            </c-heading>
-            <c-text>
-                Select the current stage for each of the four teams in the Training Complex and in the Control Room.
-            </c-text>
+            <c-grid w="100%" template-columns="repeat(2, 1fr)" gap="10" mt="4" py="8">
+                <c-box w="100%">
+                    <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
+                        Team Stages
+                    </c-heading>
+                    <c-text>
+                        Select the current stage for each of the four teams in the Training Complex and in the Control Room.
+                    </c-text>
+                </c-box>
+                <c-box w="100%">
+                    <c-heading as="h3" size="md" mb="4">
+                        All Teams
+                    </c-heading>
+
+                    <c-form-control mb="4">
+                        <c-form-label for="training-stage" fontWeight="600">Training stage</c-form-label>
+                        <c-select 
+                            id="training-stage" 
+                            placeholder="Select training stage" 
+                            variant="filled"
+                            @change="(val) => updateTrainingStage('all', val)">
+                            <option 
+                                v-for="stage in training_stages" 
+                                v-bind:key="stage.value" 
+                                :value="stage.value">
+                                {{ stage.name }}
+                            </option>
+                        </c-select>
+                    </c-form-control>
+                    <c-form-control mb="4">
+                        <c-form-label for="control-stage" fontWeight="600">Control Room stage</c-form-label>
+                        <c-select 
+                            id="control-stage"
+                            placeholder="Select control room stage"
+                            variant="filled"
+                            @change="(val) => updateControlStage('all', val)">
+                            <option 
+                                v-for="stage in control_stages"
+                                v-bind:key="stage.value"
+                                :value="stage.value">
+                                {{ stage.name }}
+                            </option>
+                        </c-select>
+                    </c-form-control>
+                </c-box>
+            </c-grid>
             <c-grid w="100%" template-columns="repeat(4, 1fr)" gap="10" mt="8">
                 <c-box w="100%" v-for="team in session.teams" v-bind:key="team.team_name">
                     <c-heading as="h3" size="md" mb="4">
@@ -300,7 +342,7 @@ export default {
         },
         updateTrainingStage(team_name, stage) {
             this.session.teams = this.session.teams.map( team => {
-                if (team.team_name == team_name) {
+                if (team.team_name == team_name || team_name == 'all') {
                     team.training_stage = stage
                 }
                 return team
@@ -309,7 +351,7 @@ export default {
         },
         updateControlStage(team_name, stage) {
             this.session.teams = this.session.teams.map( team => {
-                if (team.team_name == team_name) {
+                if (team.team_name == team_name || team_name == 'all') {
                     team.control_stage = stage
                 }
                 return team
@@ -318,6 +360,17 @@ export default {
         },
         async updateSession() {
             await setDoc(doc(this.db, "sessions", this.session.id), this.session, { merge: true })
+        },
+        copySession() {
+            const text = this.session.session_code
+            navigator.clipboard
+            .writeText(text)
+            .then(() => {
+                console.log(`"${text}" was copied to clipboard.`);
+            })
+            .catch((err) => {
+                console.error(`Error copying text to clipboard: ${err}`);
+            });
         }
     }
 }
@@ -326,6 +379,12 @@ export default {
     button {
         background-color: #98338b !important;
         color: #ffffff;
+    }
+    button#copy {
+        background-color: #59aade !important;
+    }
+    button:hover {
+        opacity: 0.8;
     }
     input[type="checkbox"]:checked + div, input[type="checkbox"][aria-checked="mixed"] + div {
         background-color: #0d75b5 !important;

@@ -1,3 +1,6 @@
+// Import FontAwesome icons
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -53,6 +56,12 @@ export default {
       colors: {
       }
     },
+    icons: {
+      iconPack: 'fas',
+      iconSet: {
+        faCopy
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
