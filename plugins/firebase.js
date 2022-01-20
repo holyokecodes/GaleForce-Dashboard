@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
+import { getDatabase } from "firebase/database"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBZHVq70uDVkDf0hofklzv69lkRXQ05tB4",
@@ -20,4 +21,5 @@ if (!apps.length) {
 }
 
 const db = getFirestore(firebaseApp, {})
-export { db }
+const rtdb = getDatabase(firebaseApp)
+export { db, rtdb }

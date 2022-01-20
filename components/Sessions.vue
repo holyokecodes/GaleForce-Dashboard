@@ -59,6 +59,11 @@
                         </option>
                     </c-select>
                 </c-form-control>
+                <c-form-control mt="4">
+                    <c-button @click="openConfirmModal('all')">
+                        Clear All Missions
+                    </c-button>
+                </c-form-control>
             </c-box>
         </c-grid>
         <c-box v-if="session.id" py="8" borderTop="1px solid #ccc">
@@ -78,33 +83,39 @@
 
                     <c-form-control mb="4">
                         <c-form-label for="training-stage" fontWeight="600">Training stage</c-form-label>
-                        <c-select 
-                            id="training-stage" 
-                            placeholder="Select training stage" 
-                            variant="filled"
-                            @change="(val) => updateTrainingStage('all', val)">
-                            <option 
-                                v-for="stage in training_stages" 
-                                v-bind:key="stage.value" 
-                                :value="stage.value">
-                                {{ stage.name }}
-                            </option>
-                        </c-select>
+                        <c-box d="flex">
+                            <c-select 
+                                id="training-stage"
+                                v-model="selected_training_stage"
+                                placeholder="Select training stage" 
+                                variant="filled">
+                                <option 
+                                    v-for="stage in training_stages" 
+                                    v-bind:key="stage.value" 
+                                    :value="stage.value">
+                                    {{ stage.name }}
+                                </option>
+                            </c-select>
+                            <c-icon-button aria-label="Set stage" icon="arrow-forward" @click="updateTrainingStage('all', selected_training_stage)"/> 
+                        </c-box>
                     </c-form-control>
                     <c-form-control mb="4">
                         <c-form-label for="control-stage" fontWeight="600">Control Room stage</c-form-label>
-                        <c-select 
-                            id="control-stage"
-                            placeholder="Select control room stage"
-                            variant="filled"
-                            @change="(val) => updateControlStage('all', val)">
-                            <option 
-                                v-for="stage in control_stages"
-                                v-bind:key="stage.value"
-                                :value="stage.value">
-                                {{ stage.name }}
-                            </option>
-                        </c-select>
+                        <c-box d="flex">
+                            <c-select 
+                                id="control-stage"
+                                v-model="selected_control_stage"
+                                placeholder="Select control room stage"
+                                variant="filled">
+                                <option 
+                                    v-for="stage in control_stages"
+                                    v-bind:key="stage.value"
+                                    :value="stage.value">
+                                    {{ stage.name }}
+                                </option>
+                            </c-select>
+                            <c-icon-button aria-label="Set stage" icon="arrow-forward" @click="updateControlStage('all', selected_control_stage)"/>
+                        </c-box>
                     </c-form-control>
                 </c-box>
             </c-grid>
@@ -116,54 +127,103 @@
 
                     <c-form-control mb="4">
                         <c-form-label for="training-stage" fontWeight="600">Training stage</c-form-label>
-                        <c-select 
-                            id="training-stage" 
-                            v-model="team.training_stage" 
-                            placeholder="Select training stage" 
-                            variant="filled"
-                            @change="(val) => updateTrainingStage(team.team_name, val)">
-                            <option 
-                                v-for="stage in training_stages" 
-                                v-bind:key="stage.value" 
-                                :value="stage.value">
-                                {{ stage.name }}
-                            </option>
-                        </c-select>
+                        <c-box d="flex">
+                            <c-select 
+                                id="training-stage" 
+                                v-model="team.training_stage" 
+                                placeholder="Select training stage" 
+                                variant="filled">
+                                <option 
+                                    v-for="stage in training_stages" 
+                                    v-bind:key="stage.value" 
+                                    :value="stage.value">
+                                    {{ stage.name }}
+                                </option>
+                            </c-select>
+                            <c-icon-button aria-label="Set stage" icon="arrow-forward" @click="updateTrainingStage(team.team_name, team.training_stage)"/>
+                        </c-box>
                     </c-form-control>
                     <c-form-control mb="4">
                         <c-form-label for="control-stage" fontWeight="600">Control Room stage</c-form-label>
-                        <c-select 
-                            id="control-stage"
-                            v-model="team.control_stage"
-                            placeholder="Select control room stage"
-                            variant="filled"
-                            @change="(val) => updateControlStage(team.team_name, val)">
-                            <option 
-                                v-for="stage in control_stages"
-                                v-bind:key="stage.value"
-                                :value="stage.value">
-                                {{ stage.name }}
-                            </option>
-                        </c-select>
+                        <c-box d="flex">
+                            <c-select 
+                                id="control-stage"
+                                v-model="team.control_stage"
+                                placeholder="Select control room stage"
+                                variant="filled">
+                                <option 
+                                    v-for="stage in control_stages"
+                                    v-bind:key="stage.value"
+                                    :value="stage.value">
+                                    {{ stage.name }}
+                                </option>
+                            </c-select>
+                            <c-icon-button aria-label="Set stage" icon="arrow-forward" @click="updateControlStage(team.team_name, team.control_stage)"/>
+                        </c-box>
                     </c-form-control>
+
+                    <c-box v-if="team.completed_missions.length > 0">
+                        <c-form-control mb="4">
+                            <c-form-label for="training-stage" fontWeight="600">
+                                Completed Missions
+                            </c-form-label>
+                            <c-box>
+                                <c-button v-for="mission in team.completed_missions" :key="`${team.team_name}-${mission}`" class="completed-mission">
+                                    {{ mission }} <c-close-button @click="uncompleteMission(team.team_name, mission)" size="sm" />
+                                </c-button>
+                            </c-box>
+                        </c-form-control>
+                        <c-form-control>
+                            <c-button @click="openConfirmModal(team.team_name)">
+                                Clear Missions
+                            </c-button>
+                        </c-form-control>
+                    </c-box>
+                    <c-box v-else>
+                        No missions completed yet
+                    </c-box>
                 </c-box>
             </c-grid>
         </c-box>
+        <c-modal
+            :is-open="isOpen"
+            :on-close="closeConfirmModal"
+            >
+            <c-modal-content ref="content">
+                <c-modal-header>Are you sure?</c-modal-header>
+                <c-modal-close-button />
+                <c-modal-body>
+                    <c-text>
+                        Clear completed missions for {{ teamToClear }}
+                        <template v-if="teamToClear == 'all'">teams</template>
+                    </c-text>
+                </c-modal-body>
+                <c-modal-footer>
+                    <c-button @click="confimClear" mr="3">
+                        Yes
+                    </c-button>
+                    <c-button @click="closeConfirmModal" class="secondary">Cancel</c-button>
+                </c-modal-footer>
+            </c-modal-content>
+            <c-modal-overlay />
+        </c-modal>
     </div>
 </template>
 <script>
-import { getFirestore, collection, doc, addDoc, getDocs, setDoc, onSnapshot, query, where } from "firebase/firestore"; 
+import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query, where } from "firebase/firestore";
+import { getDatabase, ref, remove } from "firebase/database" 
 import { mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
             db: null,
+            rtdb: null,
             userSessions: null, 
             sessions: [],
             session: {},
             teams: [
-                { name:'Team1' },
+                { name: 'Team1' },
                 { name: 'Team2'},
                 { name: 'Team3'},
                 { name: 'Team4'}
@@ -184,6 +244,8 @@ export default {
                 { name: 'Response3', value: 'Response3' },
                 { name: 'Ending', value: 'Ending' }
             ],
+            selected_training_stage: '',
+            selected_control_stage: '',
             videos: [
                 { 
                     name: 'GaleForce Splash Screen',
@@ -277,11 +339,14 @@ export default {
                     name: 'I\'m just a girl',
                     value: 'https://www.youtube.com/watch?v=PHzOOQfhPFg&list=PL2-xNSWcVzEdwezFztJ4bxUEP5NP6cTB1&index='
                 }
-            ]
+            ],
+            isOpen: false,
+            teamToClear: ''
         }
     },
     async created() {
         this.db = getFirestore()
+        this.rtdb = getDatabase()
         
         this.userSessions = await collection(this.db, 'users/' + this.user.uid + '/sessions')
         const unsubscribe = onSnapshot(this.userSessions, (snapshot) => {
@@ -318,27 +383,33 @@ export default {
         },
         async selectSession(code) {
             const sessionsRef = collection(this.db, 'sessions');
-            const querySnapshot = await getDocs(query(sessionsRef, where('session_code', '==', code)))
-            querySnapshot.forEach((doc) => {
-                this.session = doc.data()
-                this.session.id = doc.id 
-            });
+            onSnapshot(query(sessionsRef, where('session_code', '==', code)), 
+                querySnapshot => {
+                    querySnapshot.forEach((doc) => {
+                        this.session = doc.data()
+                        this.session.id = doc.id
+                    });
+                }
+            );
         },
         autoPlay(val, $e) {
             this.session.auto_play = $e.target.checked
-            this.updateSession()
+            const title = (this.session.auto_play) ? 'Autoplay Enabled' : 'Autoplay Disabled'
+            this.updateSession(title)
         },
         mutePlayers(val, $e) {
             this.session.mute = $e.target.checked
-            this.updateSession()
+            const title = (this.session.mute) ? 'Players Muted' : 'Players Unmuted'
+            this.updateSession(title)
         },
         unlockMap(val, $e) {
             this.session.unlock_map = $e.target.checked
-            this.updateSession()
+            const title = (this.session.unlock_map) ? 'Map Unlocked' : 'Map Locked'
+            this.updateSession(title)
         },
         selectVideo(url) {
             this.session.screen_url = url
-            this.updateSession()
+            this.updateSession('Video Started')
         },
         updateTrainingStage(team_name, stage) {
             this.session.teams = this.session.teams.map( team => {
@@ -347,7 +418,9 @@ export default {
                 }
                 return team
             })
-            this.updateSession()
+            const title = 'Stage updated'
+            const description = `Stage set to ${stage} for ${team_name}`
+            this.updateSession(title, description)
         },
         updateControlStage(team_name, stage) {
             this.session.teams = this.session.teams.map( team => {
@@ -356,10 +429,50 @@ export default {
                 }
                 return team
             })
-            this.updateSession()
+            const title = 'Stage updated'
+            const description = `Stage set to ${stage} for ${team_name}`
+            this.updateSession(title, description)
         },
-        async updateSession() {
+        uncompleteMission(team_name, mission) {
+            this.session.teams = this.session.teams.map( team => {
+                if (team.team_name == team_name || team_name == 'all') {
+                    team.completed_missions = team.completed_missions.filter(
+                        m => m !== mission 
+                    )
+                }
+                return team
+            })
+            const title = 'Mission Cleared'
+            const description = `Mission ${mission} cleared for ${team_name}`
+            this.updateSession(title, description)
+            // Clear saved code from Firebase RTDB
+            remove(ref(this.rtdb, `${this.session.session_code}/teams/${team_name}/${mission}`))
+        },
+        clearMissions(team_name) {
+            this.session.teams = this.session.teams.map( team => {
+                if (team.team_name == team_name || team_name == 'all') {
+                    team.completed_missions = []
+                }
+                return team
+            })
+            const title = 'Missions Cleared'
+            let description = 'Missions were cleared for '
+            if (team_name == 'all') {
+                description += 'all teams'
+            } else {
+                description += team_name
+            }
+            this.updateSession(title, description)
+            // Clear saved code from Firebase RTDB
+            if (team_name == 'all') {
+                remove(ref(this.rtdb, `${this.session.session_code}/teams`))
+            } else {
+                remove(ref(this.rtdb, `${this.session.session_code}/teams/${team_name}`))
+            }
+        },
+        async updateSession(title, description, status='info') {
             await setDoc(doc(this.db, "sessions", this.session.id), this.session, { merge: true })
+            this.showToast(title, description, status)
         },
         copySession() {
             const text = this.session.session_code
@@ -371,6 +484,26 @@ export default {
             .catch((err) => {
                 console.error(`Error copying text to clipboard: ${err}`);
             });
+        },
+        openConfirmModal(team) {
+            this.teamToClear = team
+            this.isOpen = true
+        },
+        confimClear() {
+            this.isOpen = false
+            this.clearMissions(this.teamToClear)
+        },
+        closeConfirmModal() {
+            this.isOpen = false
+        },
+        showToast(title, description = '', status = 'info') {
+            this.$toast({
+                title,
+                description,
+                status,
+                isClosable: false,
+                duration: 5000
+            })
         }
     }
 }
@@ -380,7 +513,25 @@ export default {
         background-color: #98338b !important;
         color: #ffffff;
     }
-    button#copy {
+    button.completed-mission {
+        position: relative;
+        background-color: transparent !important;
+        color: #0d75b5 !important;
+    }
+    button.completed-mission:hover {
+        background-color: #0d75b5 !important;
+        color: #ffffff !important;
+    }
+    button.completed-mission button {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        display: none;
+    }
+    button.completed-mission:hover button {
+        display: block;
+    }
+    button#copy, button.secondary {
         background-color: #59aade !important;
     }
     button:hover {
