@@ -20,7 +20,9 @@
                             {{ session.code }}
                         </option>
                     </c-select>
-                    <c-icon-button id="copy" v-if="session.id" @click="copySession()" aria-label="Copy session code" icon="copy" ml="2"/>
+                    <c-tooltip v-if="session.id" has-arrow label="Copy to clipboard" placement="right">
+                        <c-icon-button id="copy" @click="copySession()" aria-label="Copy session code" icon="copy" ml="2"/>
+                    </c-tooltip>
                 </c-form-control>
                 <c-text v-if="session.session_code">
                     Share this code with the players in your group.
@@ -50,7 +52,7 @@
                         v-model="session.screen_url"
                         placeholder="Select video"
                         variant="filled"
-                        @change="(val) => selectVideo(session.screen_url)">
+                        @change="(val) => this.selected_video = val">
                         <option 
                             v-for="video in videos" 
                             v-bind:key="video.value" 
@@ -59,6 +61,16 @@
                         </option>
                     </c-select>
                 </c-form-control>
+                <c-tooltip has-arrow label="Play video in game" placement="left">
+                    <c-button id="videoInGame" @click="playVideoInGame()" aria-label="Play video in game" mt="2" class="secondary">
+                        <i class="fa fa-video"></i>
+                    </c-button>
+                </c-tooltip>
+                <c-tooltip has-arrow label="Open video in browser" placement="right">
+                    <c-button id="videoInBrowser" @click="openVideoInBrowser()" aria-label="Open video in browser" ml="2" mt="2" class="secondary">
+                        <i class="fas fa-external-link-alt"></i>
+                    </c-button>
+                </c-tooltip>
                 <c-form-control mt="4">
                     <c-button @click="openConfirmModal('all')">
                         Clear All Missions
@@ -246,6 +258,7 @@ export default {
             ],
             selected_training_stage: '',
             selected_control_stage: '',
+            selected_video: '',
             videos: [
                 { 
                     name: 'GaleForce Splash Screen',
@@ -407,9 +420,12 @@ export default {
             const title = (this.session.unlock_map) ? 'Map Unlocked' : 'Map Locked'
             this.updateSession(title)
         },
-        selectVideo(url) {
-            this.session.screen_url = url
+        playVideoInGame() {
+            this.session.screen_url = this.selected_video
             this.updateSession('Video Started')
+        },
+        openVideoInBrowser() {
+            window.open(this.selected_video, '_blank');
         },
         updateTrainingStage(team_name, stage) {
             this.session.teams = this.session.teams.map( team => {
