@@ -223,7 +223,7 @@
 </template>
 <script>
 import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query, where } from "firebase/firestore";
-import { getDatabase, ref, remove } from "firebase/database" 
+import { getDatabase, ref, remove, set } from "firebase/database" 
 import { mapGetters } from 'vuex'
 
 export default {
@@ -485,6 +485,7 @@ export default {
             } else {
                 remove(ref(this.rtdb, `${this.session.session_code}/teams/${team_name}`))
             }
+            this.prepopulateMissionCode(team_name)
         },
         async updateSession(title, description, status='info') {
             await setDoc(doc(this.db, "sessions", this.session.id), this.session, { merge: true })
@@ -519,6 +520,29 @@ export default {
                 status,
                 isClosable: false,
                 duration: 5000
+            })
+        },
+        prepopulateMissionCode(team_name) {
+            const savedCode = [
+                {
+                    id: '17a',
+                    blocks: '<xml xmlns=\"http://www.w3.org/1999/xhtml\">\n  <variables>\n    <variable type=\"\" id=\"vcS-CS$2Wg6ihAn#p4!-\" islocal=\"false\">distance</variable>\n  </variables>\n  <block type=\"event_whenflagclicked\" id=\"W[8Nl[70ttY=$3$7Rax9\" x=\"-242\" y=\"-413\"></block>\n  <block type=\"drone_fly\" id=\"/{}Zo={OBxAGoISI.V2x\" disabled=\"true\" x=\"-257\" y=\"-316\">\n    <field name=\"DIRECTION\">forward</field>\n    <value name=\"DISTANCE\">\n      <shadow type=\"math_number\" id=\"^wbWv*g-s[%)3r91|#tP\">\n        <field name=\"NUM\">1</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"motion_turn_right_left\" id=\"Oi^Q-PQqD`8TslR/iHQD\" disabled=\"true\" x=\"-129\" y=\"-241\">\n    <field name=\"DIRECTION\">right</field>\n  </block>\n  <block type=\"control_repeat\" id=\"mgN^n3nW..ey-uA$h$:N\" disabled=\"true\" x=\"-266\" y=\"-164\">\n    <value name=\"TIMES\">\n      <shadow type=\"math_number\" id=\"$0Twhg/oM;.!-9Z_h^z;\">\n        <field name=\"NUM\">12</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"data_variable\" id=\"(SrD4;tXeHZc#k_QkJgq\" disabled=\"true\" x=\"-83\" y=\"-125\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n  </block>\n  <block type=\"data_setvariableto\" id=\"g#m5XD#t6%j=.n]D`%g,\" disabled=\"true\" x=\"-270\" y=\"-10\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n    <value name=\"VALUE\">\n      <shadow type=\"text\" id=\"s|H2hg~?jH0tR_rA^0P7\">\n        <field name=\"TEXT\">0</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"data_changevariableby\" id=\"w/b(4r:`Yn.na6vHW$p0\" disabled=\"true\" x=\"-279\" y=\"86\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n    <value name=\"VALUE\">\n      <shadow type=\"math_number\" id=\"g)wpp=^_{bV%@Q3lNRL^\">\n        <field name=\"NUM\">1</field>\n      </shadow>\n    </value>\n  </block>\n</xml>'
+                },
+                {
+                    id: '17b',
+                    blocks: '<xml xmlns=\"http://www.w3.org/1999/xhtml\">\n  <variables>\n    <variable type=\"\" id=\"vcS-CS$2Wg6ihAn#p4!-\" islocal=\"false\">distance</variable>\n  </variables>\n  <block type=\"event_whenflagclicked\" id=\"W[8Nl[70ttY=$3$7Rax9\" x=\"-242\" y=\"-413\"></block>\n  <block type=\"drone_fly\" id=\"/{}Zo={OBxAGoISI.V2x\" disabled=\"true\" x=\"-257\" y=\"-316\">\n    <field name=\"DIRECTION\">forward</field>\n    <value name=\"DISTANCE\">\n      <shadow type=\"math_number\" id=\"^wbWv*g-s[%)3r91|#tP\">\n        <field name=\"NUM\">1</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"motion_turn_right_left\" id=\"Oi^Q-PQqD`8TslR/iHQD\" disabled=\"true\" x=\"-129\" y=\"-241\">\n    <field name=\"DIRECTION\">left</field>\n  </block>\n  <block type=\"control_repeat\" id=\"mgN^n3nW..ey-uA$h$:N\" disabled=\"true\" x=\"-266\" y=\"-164\">\n    <value name=\"TIMES\">\n      <shadow type=\"math_number\" id=\"$0Twhg/oM;.!-9Z_h^z;\">\n        <field name=\"NUM\">12</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"data_variable\" id=\"(SrD4;tXeHZc#k_QkJgq\" disabled=\"true\" x=\"-83\" y=\"-125\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n  </block>\n  <block type=\"data_setvariableto\" id=\"g#m5XD#t6%j=.n]D`%g,\" disabled=\"true\" x=\"-270\" y=\"-10\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n    <value name=\"VALUE\">\n      <shadow type=\"text\" id=\"s|H2hg~?jH0tR_rA^0P7\">\n        <field name=\"TEXT\">0</field>\n      </shadow>\n    </value>\n  </block>\n  <block type=\"data_changevariableby\" id=\"w/b(4r:`Yn.na6vHW$p0\" disabled=\"true\" x=\"-279\" y=\"86\">\n    <field name=\"VARIABLE\" id=\"vcS-CS$2Wg6ihAn#p4!-\" variabletype=\"\">distance</field>\n    <value name=\"VALUE\">\n      <shadow type=\"math_number\" id=\"g)wpp=^_{bV%@Q3lNRL^\">\n        <field name=\"NUM\">1</field>\n      </shadow>\n    </value>\n  </block>\n</xml>'
+                }
+            ]
+
+            savedCode.map( saved => {
+                if (team_name == 'all') {
+                    // add code to missions for each team
+                    this.session.teams.map( team => {
+                        set(ref(this.rtdb, `${this.session.session_code}/teams/${team.team_name}/${saved.id}/`), {blocks: saved.blocks})
+                    })
+                } else {
+                    set(ref(this.rtdb, `${this.session.session_code}/teams/${team_name}/${saved.id}/`), {blocks: saved.blocks})
+                }
             })
         }
     }
