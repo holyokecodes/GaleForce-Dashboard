@@ -265,55 +265,75 @@ export default {
                     value: 'https://galeforce.netlify.app/GaleForceSplash.html'
                 },
                 { 
-                    name: 'GaleForce Promo video',
-                    value: 'https://www.youtube.com/embed/sWlOTpK_ELo/'
+                    name: 'Join the GaleForce video (2 mins)',
+                    value: 'https://vimeo.com/689116220'
                 },
                 { 
                     name: 'Hurricane Katrina Narrative (5 min)',
                     value: 'https://www.youtube.com/embed/eR84HlLcuc4'
                 },
                 {
-                    name: 'Gale Force 2021 - 16 Years Later Video (2 min)',
-                    value: 'https://www.youtube.com/embed/5mYE-x8p5gg'
-                },
-                {
-                    name: 'Robots in the World Video (2:40)',
-                    value: 'https://www.youtube.com/embed/fgMlOqeqlA0'
+                    name: 'GaleForce Now Narrative Video (2 min)',
+                    value: 'https://www.youtube.com/embed/tYiMYy0-US0'
                 },
                 {
                     name: 'Intro to Co-robotics Slides',
-                    value: 'https://docs.google.com/presentation/d/1X3M6qx0KqqgnSaQ1v3PaG0CwiZzcgz-SDP5hPvhwlBY/present#slide=id.gb49213746e_0_310'
+                    value: 'https://docs.google.com/presentation/d/15XeLacGZ0OKx4qdkCHFRvoNwEzoQy1n6g5fdV4SV1QQ/present'
                 },
                 {
-                    name: 'Debris Removal - Hurricane Winds and Debris Video (2 min)',
+                    name: 'Debris Removal - Hurricane Winds and Debris Video (2 min, optional)',
                     value: 'https://www.youtube.com/embed/SP5v4exFuJo'
                 },
                 {
-                    name: 'Intro to Machine Learning Slides',
-                    value: 'https://docs.google.com/presentation/d/1pCITlQeTgiM8Sq55PfWzejOVTmkfV4lpNINuo2YYXzs/present'
+                    name: 'Cleaning Debris Slides (optional)',
+                    value: 'https://docs.google.com/presentation/d/1sK4GL_SxSeC9C6BKpw9SRt2q7Bhro3Ghqd5NYGjZ2G8/present'
                 },
                 {
-                    name: 'Train Robots to have Computer Vision',
-                    value: 'https://cv-recognize-objects.glitch.me/'
+                    name: 'T1 Debris Missions demo (2 min)',
+                    value: 'https://www.youtube.com/embed/XROmdFMX4Qs'
                 },
                 {
-                    name: 'Drone Delivery Video (1 min)',
+                    name: 'Coding Slides (optional)',
+                    value: 'https://docs.google.com/presentation/d/18kDq7X4nuaspXXHBHlgp2PCc0MvexUpCUccs1lKRF5s/present'
+                },
+                {
+                    name: 'T4 Coding Delivery Missions demo (2 min)',
+                    value: 'https://www.youtube.com/embed/dMEzASB6H8c'
+                },
+                {
+                    name: 'Drone Delivery Narrative Video (1 min)',
                     value: 'https://www.youtube.com/embed/LIC5Ppba4KQ'
                 },
                 {
-                    name: 'Boston Dynamics Robots Dancing to Do you love me',
-                    value: 'https://www.youtube.com/embed/fn3KWM1kuAw'
+                    name: 'Drones Intro Slides',
+                    value: 'https://docs.google.com/presentation/d/1xacXOpWNXrHRqHB0dxl1XZoBnUiEJ2V51jiI9YJ5s4o/present'
                 },
                 {
-                    name: 'Coding with Drones Slides',
-                    value: 'https://docs.google.com/presentation/d/1oJH_6f7nPxcP1AJB90SIq6R0qg3ifpWYiTZDjBYOpPw/present'
+                    name: 'T11 Drone Delivery Missions demo (5 min)',
+                    value: 'https://www.youtube.com/embed/Rzn34dbUxn4'
                 },
                 {
-                    name: 'Session 5: prepare for storm in 2 days',
+                    name: 'Loops and Drones slides and T15 demo mission (7 min)',
+                    value: 'https://www.youtube.com/embed/A4BcWqxGnso'
+                },
+                {
+                    name: 'Loops and Variables: Spiraling Square Slides (optional)',
+                    value: 'https://docs.google.com/presentation/d/1j35ei924jTEFKdyvc425aGzU90a3iDbu5fQlECuP2h4/present'
+                },
+                {
+                    name: 'Intro to Machine Learning Slides (optional)',
+                    value: 'https://docs.google.com/presentation/d/1pCITlQeTgiM8Sq55PfWzejOVTmkfV4lpNINuo2YYXzs/present'
+                },
+                {
+                    name: 'Train Robots to have Computer Vision (optional)',
+                    value: 'https://cv-recognize-objects.glitch.me/'
+                },
+                {
+                    name: 'Session 5: prepare for storm in 2 days (25 secs)',
                     value: 'https://www.youtube.com/embed/KggihHftAlY'
                 },
                 {
-                    name: 'Session 6: 1 day before',
+                    name: 'Session 6: 1 day before storm (19 secs)',
                     value: 'https://www.youtube.com/embed/_u9Evqvxbrg'
                 },
                 {
@@ -321,37 +341,25 @@ export default {
                     value: 'https://youtube.com/embed/iMblDEoCxEs'
                 },
                 {
-                    name: 'Session 7',
+                    name: 'Session 7 Update First Hurricane Response day (19 secs)',
                     value: 'https://www.youtube.com/embed/2HotGTdtpYo'
                 },
                 {
-                    name: 'Session 8',
+                    name: 'Session 8 Update 2nd Hurricane Response day (19 secs)',
                     value: 'https://www.youtube.com/embed/FIkYsmRmRbw'
                 },
                 {
                     name: 'Thank you from Dr. Jackson',
                     value: 'https://www.youtube.com/embed/tVrgaF8tj3A'
                 },
-                {
-                    name: 'Happy - on youtube',
-                    value: 'https://www.youtube.com/watch?v=ZbZSe6N_BXs'
+                 {
+                    name: 'Robots in the World Video (2:40)',
+                    value: 'https://www.youtube.com/embed/fgMlOqeqlA0'
                 },
                 {
-                    name: 'Chaka Khan - Like Sugar on youtube with ads',
-                    value: 'https://www.youtube.com/watch?v=RecY5iZn6B0'
+                    name: 'Boston Dynamics Robots Dancing to Do you love me',
+                    value: 'https://www.youtube.com/embed/fn3KWM1kuAw'
                 },
-                {
-                    name: 'Good feeling',
-                    value: 'https://www.youtube.com/watch?v=3OnnDqH6Wj8'
-                },
-                {
-                    name: 'Taio Cruz - Dynamite',
-                    value: 'https://www.youtube.com/watch?v=kJNyjdpT1vo'
-                },
-                {
-                    name: 'I\'m just a girl',
-                    value: 'https://www.youtube.com/watch?v=PHzOOQfhPFg&list=PL2-xNSWcVzEdwezFztJ4bxUEP5NP6cTB1&index='
-                }
             ],
             isOpen: false,
             teamToClear: ''
