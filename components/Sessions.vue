@@ -266,7 +266,7 @@ export default {
                 },
                 { 
                     name: 'Join the GaleForce video (2 mins)',
-                    value: 'https://vimeo.com/689116220'
+                    value: 'https://www.youtube.com/embed/iPkxXE2n1M4'
                 },
                 { 
                     name: 'Hurricane Katrina Narrative (5 min)',
@@ -302,7 +302,7 @@ export default {
                 },
                 {
                     name: 'Drone Delivery Narrative Video (1 min)',
-                    value: 'https://www.youtube.com/embed/LIC5Ppba4KQ'
+                    value: 'https://www.youtube.com/embed/DsVWbgyIofg'
                 },
                 {
                     name: 'Drones Intro Slides',
