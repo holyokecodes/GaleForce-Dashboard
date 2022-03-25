@@ -20,16 +20,36 @@
                             {{ session.code }}
                         </option>
                     </c-select>
-                    <c-tooltip v-if="session.id" has-arrow label="Copy to clipboard" placement="right">
-                        <c-icon-button id="copy" @click="copySession()" aria-label="Copy session code" icon="copy" ml="2"/>
-                    </c-tooltip>
+                    <c-icon-button v-if="session.session_code" id="copy" @click="copySession()" aria-label="Copy session code" icon="copy" ml="2"/>
                 </c-form-control>
                 <c-text v-if="session.session_code">
                     Share this code with the players in your group.
                 </c-text>
                 <c-button mt="4" variant-color="blue" @click="newSession()">New Session</c-button>
+                <c-button v-if="session.id" mt="4" variant-color="red" @click="openDeleteSessionModal()">Delete Session</c-button>
+                <c-modal
+                    :is-open="deleteSessionIsOpen"
+                    :on-close="cancelDeleteSessionModal"
+                    >
+                    <c-modal-content ref="content">
+                        <c-modal-header>Are you sure?</c-modal-header>
+                        <c-modal-close-button />
+                        <c-modal-body>
+                            <c-text>
+                                Delete Session {{ session.session_code }}
+                            </c-text>
+                        </c-modal-body>
+                        <c-modal-footer>
+                            <c-button @click="confirmDeleteSession" mr="3">
+                                Yes
+                            </c-button>
+                            <c-button @click="cancelDeleteSessionModal" class="secondary">Cancel</c-button>
+                        </c-modal-footer>
+                    </c-modal-content>
+                    <c-modal-overlay />
+                </c-modal>
             </c-box>
-            <c-box v-if="session.id" w="100%">
+            <c-box v-if="session.session_code" w="100%">
                 <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
                     Session Settings
                 </c-heading>
@@ -78,7 +98,7 @@
                 </c-form-control>
             </c-box>
         </c-grid>
-        <c-box v-if="session.id" py="8" borderTop="1px solid #ccc">
+        <c-box v-if="session.session_code" py="8" borderTop="1px solid #ccc">
             <c-grid w="100%" template-columns="repeat(2, 1fr)" gap="10" mt="4" py="8">
                 <c-box w="100%">
                     <c-heading as="h2" size="lg" mb="2" textTransform="uppercase">
@@ -222,7 +242,7 @@
     </div>
 </template>
 <script>
-import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, getDocs, setDoc, onSnapshot, query, where, deleteDoc } from "firebase/firestore";
 import { getDatabase, ref, remove, set } from "firebase/database" 
 import { mapGetters } from 'vuex'
 
@@ -234,6 +254,7 @@ export default {
             userSessions: null, 
             sessions: [],
             session: {},
+            unsubscribe: null,
             teams: [
                 { name: 'Team1' },
                 { name: 'Team2'},
@@ -353,6 +374,7 @@ export default {
                     value: 'https://www.youtube.com/watch?v=PHzOOQfhPFg&list=PL2-xNSWcVzEdwezFztJ4bxUEP5NP6cTB1&index='
                 }
             ],
+            deleteSessionIsOpen: false,
             isOpen: false,
             teamToClear: ''
         }
@@ -396,7 +418,7 @@ export default {
         },
         async selectSession(code) {
             const sessionsRef = collection(this.db, 'sessions');
-            onSnapshot(query(sessionsRef, where('session_code', '==', code)), 
+            this.unsubscribe = onSnapshot(query(sessionsRef, where('session_code', '==', code)), 
                 querySnapshot => {
                     querySnapshot.forEach((doc) => {
                         this.session = doc.data()
@@ -404,6 +426,15 @@ export default {
                     });
                 }
             );
+        },
+        async deleteSession() {
+            const sessionsRef = collection(this.db, `users/${this.user.uid}/sessions`)
+            const q = query(sessionsRef, where('code', '==', this.session.session_code))
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                deleteDoc(doc.ref)
+            });
+            this.unsubscribe();
         },
         autoPlay(val, $e) {
             this.session.auto_play = $e.target.checked
@@ -512,6 +543,17 @@ export default {
         },
         closeConfirmModal() {
             this.isOpen = false
+        },
+        openDeleteSessionModal(session) {
+            this.deleteSessionIsOpen = true
+        },
+        confirmDeleteSession() {
+            this.deleteSession()
+            this.session = {}
+            this.deleteSessionIsOpen = false
+        },
+        cancelDeleteSessionModal() {
+            this.deleteSessionIsOpen = false
         },
         showToast(title, description = '', status = 'info') {
             this.$toast({
